@@ -349,7 +349,7 @@ class HttpFD(FileDownloader):
 
             # Update file modification time
             if self.params.get('updatetime'):
-                info_dict['filetime'] = self.try_utime(ctx.filename, ctx.data.headers.get('last-modified', None))
+                info_dict['filetime'] = self.try_utime(ctx.filename, ctx.data.headers.get('last-modified', info_dict.get('timestamp', None)))
 
             self._hook_progress({
                 'downloaded_bytes': byte_counter,
