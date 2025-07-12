@@ -110,7 +110,7 @@ class FragmentFD(FileDownloader):
 
     def _download_fragment(self, ctx, frag_url, info_dict, headers=None, request_data=None):
         fragment_filename = '%s-Frag%d' % (ctx['tmpfilename'], ctx['fragment_index'])
-        fragment_info_dict = {
+        fragment_info_dict = info_dict | {
             'url': frag_url,
             'http_headers': headers or info_dict.get('http_headers'),
             'request_data': request_data,
