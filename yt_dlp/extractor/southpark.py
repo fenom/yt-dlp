@@ -3,6 +3,7 @@ from ..utils import (
     try_get,
     update_url_query,
     url_basename,
+    parse_duration,
 )
 
 
@@ -38,10 +39,13 @@ class SouthParkIE(MTVServicesInfoExtractor):
         auth_suite_wrapper = self._extract_child_with_type(flex_wrapper, 'AuthSuiteWrapper')
         player = self._extract_child_with_type(auth_suite_wrapper or flex_wrapper, 'Player')
         video_detail = try_get(player, lambda x: x['props']['videoDetail'])
+        video_detail['channel'] = try_get(video_detail, lambda x: x['channel']['name'])
+        video_detail['timestamp'] = try_get(video_detail, lambda x: x['airDate']['timestamp'])
         info_url = update_url_query(video_detail['videoServiceUrl'], {'clientPlatform': 'desktop'})
         info = self._download_json(info_url, video_detail['id']).get('stitchedstream')
+        video_detail['duration'] = try_get(info, lambda x: parse_duration(x['duration']))
         formats, subtitles = self._extract_m3u8_formats_and_subtitles(info['source'], video_detail['id'])
-        return player['props']['videoDetail'] | {'formats': formats, 'subtitles': subtitles}
+        return video_detail | {'formats': formats, 'subtitles': subtitles}
 
 
 class SouthParkEsIE(SouthParkIE):  # XXX: Do not subclass from concrete IE
