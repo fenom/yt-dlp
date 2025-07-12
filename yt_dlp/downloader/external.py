@@ -72,6 +72,8 @@ class ExternalFD(FragmentFD):
                     'downloaded_bytes': fsize,
                     'total_bytes': fsize,
                 })
+                if self.params.get('updatetime'):
+                    info_dict['filetime'] = self.try_utime(filename, info_dict.get('timestamp', None))
             self._hook_progress(status, info_dict)
             return True
         else:
