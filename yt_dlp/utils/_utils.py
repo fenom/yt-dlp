@@ -643,14 +643,10 @@ def sanitize_filename(s, restricted=False, is_id=NO_DEFAULT):
             return {'/': '\u29F8', '\\': '\u29f9'}.get(char, chr(ord(char) + 0xfee0))
         elif char == '?' or ord(char) < 32 or ord(char) == 127:
             return ''
-        elif char == '"':
-            return '' if restricted else '\''
-        elif char == ':':
-            return '\0_\0-' if restricted else '\0 \0-'
-        elif char in '\\/|*<>':
-            return '\0_'
-        if restricted and (char in '!&\'()[]{}$;`^,#' or char.isspace() or ord(char) > 127):
-            return '' if unicodedata.category(char)[0] in 'CM' else '\0_'
+        elif char == '\'"’':
+            return '\''
+        if restricted and not char.isalnum() and char not in ',.':
+            return '' if unicodedata.category(char)[0] in 'CM' else '\0 '
         return char
 
     # Replace look-alike Unicode glyphs
