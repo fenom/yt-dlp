@@ -277,7 +277,7 @@ class FileDownloader:
         timestr = last_modified_hdr
         if timestr is None:
             return
-        filetime = timeconvert(timestr)
+        filetime = timeconvert(timestr) if isinstance(timestr, str) else timestr
         if filetime is None:
             return filetime
         # Ignore obviously invalid dates
