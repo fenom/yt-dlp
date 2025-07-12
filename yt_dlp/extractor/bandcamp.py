@@ -19,7 +19,7 @@ from ..utils import (
     url_or_none,
     urljoin,
 )
-from ..utils.traversal import find_element, traverse_obj
+from ..utils.traversal import find_element, find_elements, traverse_obj
 
 
 class BandcampIE(InfoExtractor):
@@ -511,6 +511,10 @@ class BandcampUserIE(InfoExtractor):
         yield from traverse_obj(webpage, (
             {find_element(id='music-grid', html=True)}, {extract_attributes},
             'data-client-items', {json.loads}, ..., 'page_url', {str}))
+
+        yield from traverse_obj(webpage, (
+            {find_elements(cls='ipCellImage', html=True)}, ..., {find_element(tag='a', html=True)},
+            {extract_attributes}, 'href', {str}))
 
     def _real_extract(self, url):
         uploader = self._match_id(url)
