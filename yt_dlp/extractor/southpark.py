@@ -1,8 +1,12 @@
 from .mtv import MTVServicesInfoExtractor
+from ..utils import (
+    try_get,
+    update_url_query,
+    url_basename,
+)
 
 
 class SouthParkIE(MTVServicesInfoExtractor):
-    IE_NAME = 'southpark.cc.com'
     _VALID_URL = r'https?://(?:www\.)?(?P<url>southpark(?:\.cc|studios)\.com/((?:video-)?clips|(?:full-)?episodes|collections)/(?P<id>.+?)(\?|#|$))'
 
     _FEED_URL = 'http://feeds.mtvnservices.com/od/feed/intl-mrss-player-feed'
@@ -24,14 +28,20 @@ class SouthParkIE(MTVServicesInfoExtractor):
         'only_matching': True,
     }]
 
-    def _get_feed_query(self, uri):
-        return {
-            'accountOverride': 'intl.mtvi.com',
-            'arcEp': 'shared.southpark.global',
-            'ep': '90877963',
-            'imageEp': 'shared.southpark.global',
-            'mgid': uri,
-        }
+    def _real_extract(self, url):
+        webpage = self._download_webpage(url, url_basename(url))
+        data = self._parse_json(self._search_regex(
+            r'__DATA__\s*=\s*({.+?});', webpage, 'data'), None)
+        main_container = self._extract_child_with_type(data, 'MainContainer')
+        ab_testing = self._extract_child_with_type(main_container, 'ABTesting')
+        flex_wrapper = self._extract_child_with_type(ab_testing or main_container, 'FlexWrapper')
+        auth_suite_wrapper = self._extract_child_with_type(flex_wrapper, 'AuthSuiteWrapper')
+        player = self._extract_child_with_type(auth_suite_wrapper or flex_wrapper, 'Player')
+        video_detail = try_get(player, lambda x: x['props']['videoDetail'])
+        info_url = update_url_query(video_detail['videoServiceUrl'], {'clientPlatform': 'desktop'})
+        info = self._download_json(info_url, video_detail['id']).get('stitchedstream')
+        formats, subtitles = self._extract_m3u8_formats_and_subtitles(info['source'], video_detail['id'])
+        return player['props']['videoDetail'] | {'formats': formats, 'subtitles': subtitles}
 
 
 class SouthParkEsIE(SouthParkIE):  # XXX: Do not subclass from concrete IE
