@@ -124,6 +124,7 @@ class FragmentFD(FileDownloader):
         success, _ = ctx['dl'].download(fragment_filename, fragment_info_dict)
         if not success:
             return False
+        print(fragment_info_dict)
         if fragment_info_dict.get('filetime'):
             ctx['fragment_filetime'] = fragment_info_dict.get('filetime')
         ctx['fragment_filename_sanitized'] = fragment_filename
@@ -302,6 +303,8 @@ class FragmentFD(FileDownloader):
         elif to_file:
             self.try_rename(ctx['tmpfilename'], ctx['filename'])
             filetime = ctx.get('fragment_filetime')
+            print(ctx)
+            print(self.params)
             if self.params.get('updatetime') and filetime:
                 self.try_utime(ctx['filename'], filetime)
 
