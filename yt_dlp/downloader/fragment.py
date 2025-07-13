@@ -124,7 +124,6 @@ class FragmentFD(FileDownloader):
         success, _ = ctx['dl'].download(fragment_filename, fragment_info_dict)
         if not success:
             return False
-        print(fragment_info_dict)
         if fragment_info_dict.get('filetime'):
             ctx['fragment_filetime'] = fragment_info_dict.get('filetime')
         ctx['fragment_filename_sanitized'] = fragment_filename
@@ -303,8 +302,6 @@ class FragmentFD(FileDownloader):
         elif to_file:
             self.try_rename(ctx['tmpfilename'], ctx['filename'])
             filetime = ctx.get('fragment_filetime')
-            print(ctx)
-            print(self.params)
             if self.params.get('updatetime') and filetime:
                 self.try_utime(ctx['filename'], filetime)
 
@@ -490,14 +487,15 @@ class FragmentFD(FileDownloader):
             def _download_fragment(fragment):
                 ctx_copy = ctx.copy()
                 download_fragment(fragment, ctx_copy)
-                return fragment, fragment['frag_index'], ctx_copy.get('fragment_filename_sanitized')
+                return fragment, fragment['frag_index'], ctx_copy.get('fragment_filename_sanitized'), ctx_copy.get('fragment_filetime')
 
             with tpe or concurrent.futures.ThreadPoolExecutor(max_workers) as pool:
                 try:
-                    for fragment, frag_index, frag_filename in pool.map(_download_fragment, fragments):
+                    for fragment, frag_index, frag_filename, frag_filetime in pool.map(_download_fragment, fragments):
                         ctx.update({
                             'fragment_filename_sanitized': frag_filename,
                             'fragment_index': frag_index,
+                            'fragment_filetime': frag_filetime,
                         })
                         if not append_fragment(decrypt_fragment(fragment, self._read_fragment(ctx)), frag_index, ctx):
                             return False
