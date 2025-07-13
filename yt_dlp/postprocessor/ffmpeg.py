@@ -838,6 +838,8 @@ class FFmpegMergerPP(FFmpegPostProcessor):
         self.to_screen(f'Merging formats into "{filename}"')
         self.run_ffmpeg_multiple_files(info['__files_to_merge'], temp_filename, args)
         os.rename(temp_filename, filename)
+        oldest_mtime = min(os.stat(path).st_mtime for path in info['__files_to_merge'] if path)
+        self.try_utime(filename, oldest_mtime, oldest_mtime)
         return info['__files_to_merge'], info
 
     def can_merge(self):
