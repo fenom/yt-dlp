@@ -5,7 +5,7 @@ from ..utils import traverse_obj
 
 
 class XboxIE(InfoExtractor):
-    _VALID_URL = r'https?://(?:www\.)?(?P<url>xbox\.com/.*games/(?P<id>.+?)(\?|/|#|$))'
+    _VALID_URL = r'https?://(?:www\.)?(?P<url>xbox\.com/.*games/(?!store/)(?P<id>.+?)(\?|/|#|$))'
 
     def _real_extract(self, url):
         id = self._match_id(url)
@@ -20,7 +20,7 @@ class XboxIE(InfoExtractor):
 
 
 class XboxStoreIE(InfoExtractor):
-    _VALID_URL = r'https?://(?:www\.)?(?P<url>xbox\.com/.*games/store/[^/]*/(?P<id>.+?)(\?|/|#|$))'
+    _VALID_URL = r'https?://(?:www\.)?(?P<url>xbox\.com/.*games/store/[^/]+/(?P<id>.+?)(\?|/|#|$))'
 
     def _real_extract(self, url):
         id = self._match_id(url).upper()
