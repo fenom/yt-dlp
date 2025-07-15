@@ -45,7 +45,12 @@ class SouthParkIE(MTVServicesInfoExtractor):
         info = self._download_json(info_url, video_detail['id']).get('stitchedstream')
         video_detail['duration'] = try_get(info, lambda x: parse_duration(x['duration']))
         formats, subtitles = self._extract_m3u8_formats_and_subtitles(info['source'], video_detail['id'])
-        return video_detail | {'formats': formats, 'subtitles': subtitles}
+        return video_detail | {'media_type': video_detail.get('subType', video_detail.get('entityType')),
+            'series': video_detail.get('parentEntity').get('title'),
+            'series_id': video_detail.get('parentEntity').get('urlKey'),
+            'season_number': video_detail.get('seasonNumber'),
+            'episode_number': video_detail.get('episodeAiringOrder'),
+            'formats': formats, 'subtitles': subtitles}
 
 
 class SouthParkEsIE(SouthParkIE):  # XXX: Do not subclass from concrete IE
