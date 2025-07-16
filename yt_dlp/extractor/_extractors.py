@@ -2014,6 +2014,7 @@ from .svt import (
     SVTSeriesIE,
 )
 from .swearnet import SwearnetEpisodeIE
+from .symphonylive import SymphonyliveIE
 from .syvdk import SYVDKIE
 from .sztvhu import SztvHuIE
 from .tagesschau import TagesschauIE
