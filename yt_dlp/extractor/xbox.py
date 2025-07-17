@@ -15,8 +15,8 @@ class XboxIE(InfoExtractor):
             for i in re.findall(r'data-otto-video="([^"]+)"', webpage)]
         video_id = lambda v: v['sources'][0]['url'].split('/')[-1]
         return self.playlist_result([i | {'id': video_id(i), 'title': i['videoTitle'], 'channel': title,
-            'formats': self._extract_m3u8_formats(i['sources'][1]['url'], video_id(i))} for i in videos],
-            id, title)
+            'formats': self._extract_m3u8_formats(i['sources'][1]['url'], video_id(i)) +
+            self._extract_mpd_formats(i['sources'][2]['url'], video_id(i))} for i in videos], id, title)
 
 
 class XboxStoreIE(InfoExtractor):
