@@ -4,6 +4,16 @@
 # To create a release, dispatch the https://github.com/yt-dlp/yt-dlp/actions/workflows/release.yml workflow on master
 -->
 
+### 2025.08.12.171320
+
+#### Core changes
+- [Merge branch 'yt-dlp:master' into master](https://github.com/yt-dlp/yt-dlp/commit/e4d40075bc9e05830bec59513af4901493a2f160) by [pukkandan](https://github.com/pukkandan)
+- [Update _utils.py](https://github.com/yt-dlp/yt-dlp/commit/cc72b6aa96d2800712a89ce2027d22382b809eca) by [pukkandan](https://github.com/pukkandan)
+- [Update mediaite.py](https://github.com/yt-dlp/yt-dlp/commit/5ec7ec3fdc8d8fb88ea01f48b0bbed4452bef07b) by [pukkandan](https://github.com/pukkandan)
+
+#### Postprocessor changes
+- **xattrmetadata**: [Only set "Where From" attribute on macOS](https://github.com/yt-dlp/yt-dlp/commit/bdeb3eb3f29eebbe8237fbc5186e51e7293eea4a) ([#13999](https://github.com/yt-dlp/yt-dlp/issues/13999)) by [bashonly](https://github.com/bashonly)
+
 ### 2025.08.11
 
 #### Important changes
