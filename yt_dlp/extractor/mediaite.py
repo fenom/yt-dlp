@@ -1,3 +1,5 @@
+import re
+
 from .common import InfoExtractor
 
 
@@ -98,7 +100,9 @@ class MediaiteIE(InfoExtractor):
 
     def _real_extract(self, url):
         webpage = self._download_webpage(url, None)
-        video_id = self._search_regex(
-            [r'"https://cdn\.jwplayer\.com/players/(\w+)', r'data-video-id\s*=\s*\"([^\"]+)\"'], webpage, 'id')
-        data_json = self._download_json(f'https://cdn.jwplayer.com/v2/media/{video_id}', video_id)
-        return self._parse_jwplayer_data(data_json)
+        video_ids = set(j for i in re.findall(
+            r'"https://cdn\.jwplayer\.com/players/(\w+)|data-video-id\s*=\s*\"([^\"]+)\"',
+            webpage) for j in i if j)
+        return self.playlist_result([self._parse_jwplayer_data(self._download_json(
+            f'https://cdn.jwplayer.com/v2/media/{video_id}', video_id)) for video_id in video_ids],
+            self._generic_id(url), self._generic_title(url, webpage))
