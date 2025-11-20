@@ -190,6 +190,7 @@ The only reliable way to check if a site is supported is to try it.
  - **Biography**
  - **BitChute**
  - **BitChuteChannel**
+ - **Bitmovin**
  - **BlackboardCollaborate**
  - **BlackboardCollaborateLaunch**
  - **BleacherReport**: (**Currently broken**)
@@ -762,7 +763,8 @@ The only reliable way to check if a site is supported is to try it.
  - **massengeschmack.tv**
  - **Masters**
  - **MatchTV**
- - **Mave**
+ - **mave**
+ - **mave:channel**
  - **MBN**: mbn.co.kr (매일방송)
  - **MDR**: MDR.DE
  - **MedalTV**
@@ -962,6 +964,7 @@ The only reliable way to check if a site is supported is to try it.
  - **Nova**: TN.cz, Prásk.tv, Nova.cz, Novaplus.cz, FANDA.tv, Krásná.cz and Doma.cz
  - **NovaEmbed**
  - **NovaPlay**
+ - **NowCanal**
  - **nowness**
  - **nowness:playlist**
  - **nowness:series**
@@ -1414,6 +1417,7 @@ The only reliable way to check if a site is supported is to try it.
  - **svt:​play:series**
  - **SwearnetEpisode**
  - **Syfy**
+ - **Symphonylive**
  - **SYVDK**
  - **SztvHu**
  - **t-online.de**: (**Currently broken**)
@@ -1461,6 +1465,8 @@ The only reliable way to check if a site is supported is to try it.
  - **TFO**: (**Currently broken**)
  - **theatercomplextown:ppv**: [*theatercomplextown*](## "netrc machine")
  - **theatercomplextown:vod**: [*theatercomplextown*](## "netrc machine")
+ - **TheChosen**
+ - **TheChosenGroup**
  - **TheGuardianPodcast**
  - **TheGuardianPodcastPlaylist**
  - **TheHighWire**
@@ -1751,7 +1757,9 @@ The only reliable way to check if a site is supported is to try it.
  - **wykop:​dig:comment**
  - **wykop:post**
  - **wykop:​post:comment**
+ - **Xbox**
  - **XboxClips**
+ - **XboxStore**
  - **XHamster**
  - **XHamsterEmbed**
  - **XHamsterUser**
@@ -1778,6 +1786,7 @@ The only reliable way to check if a site is supported is to try it.
  - **YapFiles**: (**Currently broken**)
  - **Yappy**: (**Currently broken**)
  - **YappyProfile**
+ - **yfanefa**
  - **YleAreena**
  - **YouJizz**
  - **youku**: 优酷
