@@ -696,7 +696,7 @@ class TestYoutubeDL(unittest.TestCase):
 
         # Sanitization options
         test('%(title3)s', (None, 'foo⧸bar⧹test'))
-        test('%(title5)s', (None, 'aei_A'), restrictfilenames=True)
+        test('%(title5)s', (None, 'aei A'), restrictfilenames=True)
         test('%(title3)s', (None, 'foo_bar_test'), windowsfilenames=False, restrictfilenames=True)
         if sys.platform != 'win32':
             test('%(title3)s', (None, 'foo⧸bar\\test'), windowsfilenames=False)
