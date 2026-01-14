@@ -1752,10 +1752,9 @@ class InfoExtractor:
                         'title': unescapeHTML(e.get('headline')),
                         'description': unescapeHTML(e.get('articleBody') or e.get('description')),
                     })
-                    if is_type(traverse_obj(e, ('video', 0)), 'VideoObject'):
-                        extract_video_object(e['video'][0])
-                    elif is_type(traverse_obj(e, ('subjectOf', 0)), 'VideoObject'):
-                        extract_video_object(e['subjectOf'][0])
+                    for k in e:
+                        if is_type(traverse_obj(e, (k, 0)), 'VideoObject'):
+                            extract_video_object(e[k][0])
                 elif is_type(e, 'VideoObject', 'AudioObject'):
                     extract_video_object(e)
                     if expected_type is None:
