@@ -8,7 +8,7 @@ from ..utils import (
 
 
 class TMZIE(InfoExtractor):
-    _VALID_URL = r'https?://(?:www\.)?tmz\.com/.*'
+    _VALID_URL = r'https?://(?:www\.)?tmz\.com/.*/(?P<id>[^/?#&]+)'
     _TESTS = [
         {
             'url': 'http://www.tmz.com/videos/0-cegprt2p/',
@@ -167,8 +167,9 @@ class TMZIE(InfoExtractor):
     ]
 
     def _real_extract(self, url):
-        webpage = self._download_webpage(url, url)
-        jsonld = self._search_json_ld(webpage, url)
+        id = self._match_id(url)
+        webpage = self._download_webpage(url, id)
+        jsonld = self._search_json_ld(webpage, id)
         if not jsonld or 'url' not in jsonld:
             # try to extract from YouTube Player API
             # see https://developers.google.com/youtube/iframe_api_reference#Video_Queueing_Functions
@@ -186,6 +187,4 @@ class TMZIE(InfoExtractor):
                         if '/status/' in match:
                             return self.url_result(match)
             raise ExtractorError('No video found!')
-        if id not in jsonld:
-            jsonld['id'] = url
         return jsonld
