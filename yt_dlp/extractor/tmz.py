@@ -167,9 +167,9 @@ class TMZIE(InfoExtractor):
     ]
 
     def _real_extract(self, url):
-        id = self._match_id(url)
-        webpage = self._download_webpage(url, id)
-        jsonld = self._search_json_ld(webpage, id)
+        display_id = self._match_id(url)
+        webpage = self._download_webpage(url, display_id)
+        jsonld = self._search_json_ld(webpage, display_id)
         if not jsonld or 'url' not in jsonld:
             # try to extract from YouTube Player API
             # see https://developers.google.com/youtube/iframe_api_reference#Video_Queueing_Functions
