@@ -12,11 +12,11 @@ class XboxIE(InfoExtractor):
         webpage = self._download_webpage(url, display_id)
         title = self._html_extract_title(webpage, display_id).split(':')[0]
         videos = [self._download_json(f'https://video.cascade.microsoft.com/api/og/xbox/videos/{i}/playback-info', i)
-            for i in re.findall(r'data-otto-video="([^"]+)"', webpage)]
+                  for i in re.findall(r'data-otto-video="([^"]+)"', webpage)]
         video_id = lambda v: v['sources'][0]['url'].split('/')[-1]
         return self.playlist_result([i | {'id': video_id(i), 'title': i['videoTitle'], 'channel': title,
-            'formats': self._extract_m3u8_formats(i['sources'][1]['url'], video_id(i)) +
-            self._extract_mpd_formats(i['sources'][2]['url'], video_id(i))} for i in videos], display_id, title)
+                                          'formats': self._extract_m3u8_formats(i['sources'][1]['url'], video_id(i)) +
+                                          self._extract_mpd_formats(i['sources'][2]['url'], video_id(i))} for i in videos], display_id, title)
 
 
 class XboxStoreIE(InfoExtractor):
@@ -36,5 +36,5 @@ class XboxStoreIE(InfoExtractor):
             video_id = lambda v: v['url'].split('/')[-1].split('-AVS')[0]
             func = self._extract_m3u8_formats
         return self.playlist_result([i | {'id': video_id(i), 'channel': product['title'],
-            'formats': func(i['url'], video_id(i))} for i in videos],
-            id, product['title'])
+                                          'formats': func(i['url'], video_id(i))} for i in videos],
+                                     id, product['title'])
