@@ -646,7 +646,7 @@ def sanitize_filename(s, restricted=False, is_id=NO_DEFAULT):
             return ''
         elif char in '\'"‘’“”':
             return '\''
-        if restricted and (not char.isalnum() and char not in ',.' or not char.isascii()):
+        if restricted and ((not char.isalnum() and char not in ',.') or not char.isascii()):
             return '' if unicodedata.category(char)[0] in 'CM' else '\0 '
         return char
 
