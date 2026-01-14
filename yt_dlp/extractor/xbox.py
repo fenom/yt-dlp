@@ -23,10 +23,10 @@ class XboxStoreIE(InfoExtractor):
     _VALID_URL = r'https?://(?:www\.)?(?P<url>xbox\.com/.*games/store/[^/]+/(?P<id>.+?)(\?|/|#|$))'
 
     def _real_extract(self, url):
-        id = self._match_id(url).upper()
-        webpage = self._download_webpage(url, id)
-        data = self._search_json(r'__PRELOADED_STATE__\s*=', webpage, 'data', id)
-        product = traverse_obj(data, ('core2', 'products', 'productSummaries', id))
+        display_id = self._match_id(url).upper()
+        webpage = self._download_webpage(url, display_id)
+        data = self._search_json(r'__PRELOADED_STATE__\s*=', webpage, 'data', display_id)
+        product = traverse_obj(data, ('core2', 'products', 'productSummaries', display_id))
         if product.get('videos'):
             videos = product.get('videos', [])
             video_id = lambda v: v['url'].split('/')[-3]
