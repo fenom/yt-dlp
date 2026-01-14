@@ -1608,7 +1608,7 @@ class InfoExtractor:
             json_ld = self._parse_json(json_ld, video_id, fatal=fatal)
         if not json_ld:
             return {}
-        info = {}
+        info = {'id': video_id}
 
         INTERACTION_TYPE_MAP = {
             'CommentAction': 'comment',
