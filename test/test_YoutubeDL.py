@@ -777,7 +777,7 @@ class TestYoutubeDL(unittest.TestCase):
         test('%(height)D', '1k')
         test('%(filesize)#D', '1Ki')
         test('%(height)5.2D', ' 1.08k')
-        test('%(title4)#S', 'foo 'bar' test')
+        test('%(title4)#S', 'foo \'bar\' test')
         test('%(title4).10S', ('foo ＂bar＂ ', 'foo ＂bar＂' + ('#' if os.name == 'nt' else ' ')))
         if os.name == 'nt':
             test('%(title4)q', ('"foo ""bar"" test"', None))
