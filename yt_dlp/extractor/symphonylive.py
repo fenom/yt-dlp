@@ -17,11 +17,11 @@ class SymphonyliveIE(InfoExtractor):
     def _real_extract(self, url):
         video_id = self._match_id(url)
         data = ('{"provider":"cleeng","credentials":{"token":""},"asset":{"id":"'
-            + video_id + '","drmPolicyId":"","params":{},"accessType":"public"}}')
+                + video_id + '","drmPolicyId":"","params":{},"accessType":"public"}}')
         token = self._download_json('https://ent-api.symphony.live/entitlement',
-            data=data.encode(), video_id=video_id).get('token')
+                data=data.encode(), video_id=video_id).get('token')
         video = traverse_obj(self._download_json('https://cdn.jwplayer.com/v2/media/' + video_id,
-            query={'token': token}, video_id=video_id, fatal=False), ('playlist', 0))
+                query={'token': token}, video_id=video_id, fatal=False), ('playlist', 0))
         link = traverse_obj(video, ('sources', 0, 'file'), expected_type=url_or_none)
         return video | {'id': video_id, 'timestamp': video.get('pubdate'),
-            'formats': self._extract_m3u8_formats(link, video_id)}
+                'formats': self._extract_m3u8_formats(link, video_id)}
