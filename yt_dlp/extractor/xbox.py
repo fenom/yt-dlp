@@ -8,15 +8,15 @@ class XboxIE(InfoExtractor):
     _VALID_URL = r'https?://(?:www\.)?(?P<url>xbox\.com/.*games/(?!store/)(?P<id>.+?)(\?|/|#|$))'
 
     def _real_extract(self, url):
-        id = self._match_id(url)
-        webpage = self._download_webpage(url, id)
-        title = self._html_extract_title(webpage, id).split(':')[0]
+        display_id = self._match_id(url)
+        webpage = self._download_webpage(url, display_id)
+        title = self._html_extract_title(webpage, display_id).split(':')[0]
         videos = [self._download_json(f'https://video.cascade.microsoft.com/api/og/xbox/videos/{i}/playback-info', i)
             for i in re.findall(r'data-otto-video="([^"]+)"', webpage)]
         video_id = lambda v: v['sources'][0]['url'].split('/')[-1]
         return self.playlist_result([i | {'id': video_id(i), 'title': i['videoTitle'], 'channel': title,
             'formats': self._extract_m3u8_formats(i['sources'][1]['url'], video_id(i)) +
-            self._extract_mpd_formats(i['sources'][2]['url'], video_id(i))} for i in videos], id, title)
+            self._extract_mpd_formats(i['sources'][2]['url'], video_id(i))} for i in videos], display_id, title)
 
 
 class XboxStoreIE(InfoExtractor):
