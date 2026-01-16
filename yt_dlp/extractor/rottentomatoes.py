@@ -11,7 +11,7 @@ from ..utils import (
 
 
 class RottenTomatoesIE(InfoExtractor):
-    _VALID_URL = r'https?://(?:www\.)?rottentomatoes\.com/m/(?P<playlist>[^/]+)(?:/(?P<tr>trailers)(?:/(?P<id>\w+))?)?'
+    _VALID_URL = r'https?://(?:www\.)?rottentomatoes\.com/m/(?P<playlist>[^/]+)(?:/(?P<tr>videos|trailers)(?:/(?P<id>\w+))?)?'
 
     _TESTS = [{
         'url': 'http://www.rottentomatoes.com/m/toy_story_3/trailers/11028566/',
@@ -47,7 +47,7 @@ class RottenTomatoesIE(InfoExtractor):
         'playlist_mincount': 5,
     }]
 
-    def _extract_videos(self, data, display_id):
+    def _extract_videos(self, data, display_id, channel_id=None):
         for video in traverse_obj(data, (lambda _, v: v['publicId'] and v['file'] and v['type'] == 'hls')):
             yield {
                 'formats': self._extract_m3u8_formats(
@@ -59,22 +59,25 @@ class RottenTomatoesIE(InfoExtractor):
                     'duration': ('durationInSeconds', {float_or_none}),
                     'thumbnail': ('image', {url_or_none}),
                 }),
+                'channel': channel_id or display_id,
             }
 
     def _real_extract(self, url):
-        playlist_id, trailers, video_id = self._match_valid_url(url).group('playlist', 'tr', 'id')
-        playlist_id = join_nonempty(playlist_id, trailers)
+        playlist_id, video_id = self._match_valid_url(url).group('playlist', 'id')
         webpage = self._download_webpage(url, playlist_id)
-        data = self._search_json(
-            r'<script[^>]+\bid=["\'](?:heroV|v)ideos["\'][^>]*>', webpage,
-            'data', playlist_id, contains_pattern=r'\[{(?s:.+)}\]')
+        try:
+            data = self._search_json(
+                r'<script[^>]+\bid=["\'](?:heroV|v)ideos["\'][^>]*>', webpage,
+                'data', playlist_id, contains_pattern=r'\[{(?s:.+)}\]')
+        except ExtractorError:
+            return self._real_extract(url + '/videos')
 
         if video_id:
             video_data = traverse_obj(data, lambda _, v: v['publicId'] == video_id)
             if not video_data:
                 raise ExtractorError('Unable to extract video from webpage')
-            return next(self._extract_videos(video_data, video_id))
+            return next(self._extract_videos(video_data, video_id, playlist_id))
 
         return self.playlist_result(
-            self._extract_videos(data, playlist_id), playlist_id,
+            self._extract_videos(data, playlist_id, playlist_id), playlist_id,
             clean_html(get_element_by_class('scoreboard__title', webpage)))
