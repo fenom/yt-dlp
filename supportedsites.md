@@ -1416,6 +1416,7 @@ The only reliable way to check if a site is supported is to try it.
  - **svt:​play:series**
  - **SwearnetEpisode**
  - **Syfy**
+ - **Symphonylive**
  - **SYVDK**
  - **SztvHu**
  - **t-online.de**: (**Currently broken**)
@@ -1760,7 +1761,9 @@ The only reliable way to check if a site is supported is to try it.
  - **wykop:​dig:comment**
  - **wykop:post**
  - **wykop:​post:comment**
+ - **Xbox**
  - **XboxClips**
+ - **XboxStore**
  - **XHamster**
  - **XHamsterEmbed**
  - **XHamsterUser**
