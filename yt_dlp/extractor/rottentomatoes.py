@@ -46,7 +46,7 @@ class RottenTomatoesIE(InfoExtractor):
         'playlist_mincount': 5,
     }]
 
-    def _extract_videos(self, data, display_id, channel_id=None):
+    def _extract_videos(self, data, display_id, channel_id=None, channel=None):
         for video in traverse_obj(data, (lambda _, v: v['publicId'] and v['file'] and v['type'] == 'hls')):
             yield {
                 'formats': self._extract_m3u8_formats(
@@ -58,12 +58,14 @@ class RottenTomatoesIE(InfoExtractor):
                     'duration': ('durationInSeconds', {float_or_none}),
                     'thumbnail': ('image', {url_or_none}),
                 }),
-                'channel': channel_id or display_id,
+                'channel': channel,
+                'channel_id': channel_id,
             }
 
     def _real_extract(self, url):
         playlist_id, video_id = self._match_valid_url(url).group('playlist', 'id')
         webpage = self._download_webpage(url, playlist_id)
+        channel = traverse_obj(next(self._yield_json_ld(webpage, video_id)), 'name')
         try:
             data = self._search_json(
                 r'<script[^>]+\bid=["\'](?:heroV|v)ideos["\'][^>]*>', webpage,
@@ -75,8 +77,8 @@ class RottenTomatoesIE(InfoExtractor):
             video_data = traverse_obj(data, lambda _, v: v['publicId'] == video_id)
             if not video_data:
                 raise ExtractorError('Unable to extract video from webpage')
-            return next(self._extract_videos(video_data, video_id, playlist_id))
+            return next(self._extract_videos(video_data, video_id, playlist_id, channel))
 
         return self.playlist_result(
-            self._extract_videos(data, playlist_id, playlist_id), playlist_id,
+            self._extract_videos(data, playlist_id, playlist_id, channel), playlist_id, channel,
             clean_html(get_element_by_class('scoreboard__title', webpage)))
