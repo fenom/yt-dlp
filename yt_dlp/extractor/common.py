@@ -1889,6 +1889,7 @@ class InfoExtractor:
             'ShallowReactive': indirect_reviver,
             'Ref': indirect_reviver,
             'Reactive': indirect_reviver,
+            'skipHydrate': indirect_reviver,
         })
 
         while True:
