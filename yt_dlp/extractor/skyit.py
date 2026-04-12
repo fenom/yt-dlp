@@ -64,7 +64,7 @@ class SkyItPlayerIE(SkyItBaseIE):
             url).query).get('domain', [None])[0]
         token = dict_get(self._TOKEN_MAP, (domain, 'sky'))
         video = self._download_json(
-            'https://apid.sky.it/vdp/v1/getVideoData',
+            'https://video.sky.it/api/v1/getVideoData',
             video_id, query={
                 'caller': 'sky',
                 'id': video_id,
