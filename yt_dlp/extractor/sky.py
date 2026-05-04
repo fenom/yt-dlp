@@ -8,24 +8,22 @@ from ..utils import (
 
 
 class SkyBaseIE(InfoExtractor):
-    BRIGHTCOVE_URL_TEMPLATE = 'http://players.brightcove.net/%s/%s_default/index.html?videoId=%s'
+    BRIGHTCOVE_URL_TEMPLATE = 'https://edge-auth.api.brightcove.com/playback/v1/accounts/%s/videos/ref:%s'
     _SDC_EL_REGEX = r'(?s)(<div[^>]+data-(?:component-name|fn)="sdc-(?:articl|sit)e-video"[^>]*>)'
 
     def _process_video_element(self, webpage, sdc_el, url):
         sdc = extract_attributes(sdc_el)
         provider = sdc.get('data-provider')
         if provider == 'brightcove':
-            video_id = sdc['data-video-id']
+            video_id = sdc['data-asset-id']
             account_id = sdc.get('data-account-id') or '6058004172001'
-            player_id = sdc.get('data-player-id') or 'RC9PQUaJ6'
-            video_url = self.BRIGHTCOVE_URL_TEMPLATE % (account_id, player_id, video_id)
-            ie_key = 'BrightcoveNew'
+            video_url = self.BRIGHTCOVE_URL_TEMPLATE % (account_id, video_id)
+        ld_json = {k: v for i in self._yield_json_ld(webpage, video_id) for k, v in i.items()}
 
-        return {
-            '_type': 'url_transparent',
+        return ld_json | {
             'id': video_id,
             'url': video_url,
-            'ie_key': ie_key,
+            'channel': ld_json['genre'],
         }
 
     def _real_extract(self, url):
@@ -37,12 +35,26 @@ class SkyBaseIE(InfoExtractor):
             'title': self._og_search_title(webpage),
             'description': strip_or_none(self._og_search_description(webpage)),
         })
+        token = self._download_json('https://api.condatis.sky/auth/video/token', info['id'],
+            data=f'fileReference={info['id']}&v=1&originatorHandle=brightcove-sport-gb'.encode(),
+            headers={
+                'authorization': '8f9d81f4a7604d719c21a02e8ef84ac0',
+                'x-skygdp-platform': 'web',
+                'x-skygdp-proposition': 'sportweb',
+                'x-skygdp-territory': 'GB',
+            }
+        )
+        info = self._download_json(info['url'], info['id'], headers={
+            'authorization': f'Bearer {token}',
+            'origin': 'https://www.skysports.com',
+            }) | info
+        info['formats'] = self._extract_m3u8_formats(info['sources'][1]['src'], info['id'])
         return info
 
 
 class SkySportsIE(SkyBaseIE):
     IE_NAME = 'sky:sports'
-    _VALID_URL = r'https?://(?:www\.)?skysports\.com/watch/video/([^/]+/)*(?P<id>[0-9]+)'
+    _VALID_URL = r'https?://(?:www\.)?skysports\.com/.*/video/([^/]+/)*(?P<id>[0-9]+)'
     _TESTS = [{
         'url': 'http://www.skysports.com/watch/video/10328419/bale-its-our-time-to-shine',
         'md5': '77d59166cddc8d3cb7b13e35eaf0f5ec',
