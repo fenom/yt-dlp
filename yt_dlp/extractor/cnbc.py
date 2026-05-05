@@ -4,7 +4,7 @@ from ..utils.traversal import traverse_obj
 
 
 class CNBCVideoIE(InfoExtractor):
-    _VALID_URL = r'https?://(?:www\.)?cnbc\.com/video/(?:[^/?#]+/)+(?P<id>[^./?#&]+)\.html'
+    _VALID_URL = r'https?://(?:www\.)?cnbc\.com/(video/)?(?:[^/?#]+/)+(?P<id>[^./?#&]+)\.html'
 
     _TESTS = [{
         'url': 'https://www.cnbc.com/video/2023/12/07/mcdonalds-just-unveiled-cosmcsits-new-spinoff-brand.html',
@@ -75,7 +75,9 @@ class CNBCVideoIE(InfoExtractor):
 
         player_data = traverse_obj(data, (
             'page', 'page', 'layout', ..., 'columns', ..., 'modules',
-            lambda _, v: v['name'] == 'clipPlayer', 'data', {dict}), get_all=False)
+            lambda _, v: v['name'] == 'clipPlayer', 'data', {dict}), get_all=False) or traverse_obj(data, (
+            'page', 'page', 'layout', ..., 'columns', ..., 'modules', ..., 'data', 'body', 'content',
+            lambda _, v: v['tagName'] == 'cnbcvideo', 'data', {dict}), get_all=False)
 
         return {
             'id': display_id,
