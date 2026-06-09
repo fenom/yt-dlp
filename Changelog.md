@@ -4,6 +4,12 @@
 # To create a release, dispatch the https://github.com/yt-dlp/yt-dlp/actions/workflows/release.yml workflow on master
 -->
 
+### 2026.06.09.234812
+
+#### Core changes
+- [Merge remote-tracking branch 'upstream/master'](https://github.com/yt-dlp/yt-dlp/commit/074c3f8b350e1611d2010a2dd0a2701e7d40fc27) by [pukkandan](https://github.com/pukkandan)
+- Revert "[build] Harden release workflow (#16444)" by [pukkandan](https://github.com/pukkandan)
+
 ### 2026.06.09
 
 #### Important changes
