@@ -16,11 +16,12 @@ STABLE_REPOSITORY = 'yt-dlp/yt-dlp'
 def setup_variables(environment):
     """
     `environment` must contain these keys:
-        REPOSITORY, INPUTS, PROCESSED, PYPI_PROJECT,
+        REPOSITORY, INPUTS, PROCESSED,
+        PUSH_VERSION_COMMIT, PYPI_PROJECT,
         SOURCE_PYPI_PROJECT, SOURCE_PYPI_SUFFIX,
         TARGET_PYPI_PROJECT, TARGET_PYPI_SUFFIX,
         SOURCE_ARCHIVE_REPO, TARGET_ARCHIVE_REPO,
-        HAS_ARCHIVE_REPO_TOKEN, HAS_RELEASE_KEY
+        HAS_ARCHIVE_REPO_TOKEN
 
     `INPUTS` must contain these keys:
         prerelease
@@ -56,7 +57,7 @@ def setup_variables(environment):
         resolved_source = 'stable'
 
     revision = None
-    if INPUTS['prerelease'] or not json.loads(environment['HAS_RELEASE_KEY']):
+    if INPUTS['prerelease'] or not environment['PUSH_VERSION_COMMIT']:
         revision = dt.datetime.now(tz=dt.timezone.utc).strftime('%H%M%S')
 
     version = calculate_version(INPUTS.get('version') or revision)
