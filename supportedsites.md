@@ -1333,6 +1333,7 @@ The only reliable way to check if a site is supported is to try it.
  - **svt:play**: SVT Play and Öppet arkiv
  - **svt:​play:series**
  - **Syfy**
+ - **Symphonylive**
  - **SztvHu**
  - **t-online.de**: (**Currently broken**)
  - **Tagesschau**: (**Currently broken**)
@@ -1649,7 +1650,9 @@ The only reliable way to check if a site is supported is to try it.
  - **wykop:​dig:comment**
  - **wykop:post**
  - **wykop:​post:comment**
+ - **Xbox**
  - **XboxClips**
+ - **XboxStore**
  - **XHamster**
  - **XHamsterEmbed**
  - **XHamsterUser**
