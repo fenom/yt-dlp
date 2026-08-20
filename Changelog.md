@@ -4,6 +4,13 @@
 # To create a release, dispatch the https://github.com/yt-dlp/yt-dlp/actions/workflows/release.yml workflow on master
 -->
 
+### 2026.08.20.142043
+
+#### Core changes
+- [Merge branch 'master' of https://github.com/yt-dlp/yt-dlp](https://github.com/yt-dlp/yt-dlp/commit/52e02b1a6651cb1e8aa0c285767c0d99aa72eeca) by [pukkandan](https://github.com/pukkandan)
+- Revert "[build] Harden release workflow (#16444)" by [pukkandan](https://github.com/pukkandan)
+- Revert "[build] Support release tags that shadow branch names (#17409)" by [pukkandan](https://github.com/pukkandan)
+
 ### 2026.08.19
 
 #### Core changes
